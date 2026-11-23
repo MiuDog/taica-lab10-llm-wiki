@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Context Engineering（上下文工程）— LLM Wiki 與教學 HTML 簡報</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2314213d'/><text x='16' y='21' text-anchor='middle' font-size='14' font-weight='bold' fill='white' font-family='sans-serif'>CE</text></svg>">
+  <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+  <header class="site-nav">
+    <div class="site-nav-inner">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">CE</span>
+        <span>LLM Wiki × Context Engineering</span>
+      </a>
+      <nav class="nav-links" aria-label="主導覽">
+        <a class="nav-link active" href="./index.html">專案首頁</a>
+        <a class="nav-link" href="./slides.html">教學簡報</a>
+        <a class="nav-link" href="./wiki.html">互動 Wiki</a>
+        <a class="nav-link" href="./workflow.html">Loop / Graph 與反思</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero-block">
+      <span class="eyebrow">TAICA Lab 10 · LLM Wiki × 教學簡報</span>
+      <h1>Context Engineering（上下文工程）：<br>用 LLM Wiki 打造可溯源的教學 HTML 簡報</h1>
+      <p class="hero-lead">
+        本專案遵循 <strong>Andrej Karpathy 的 LLM Wiki 三層架構</strong>與「先討論、後生成」流程，將 6 篇一手學術論文與工程實戰文獻編譯為 16 篇高度互連的知識頁，再透過四道自動化檢查關卡（<code>WikiLint → OutlineGate → SlideGate → BrowserGate</code>）產出零基礎也看得懂的 14 頁互動式教學簡報。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="./slides.html">開始瀏覽教學簡報 →</a>
+        <a class="btn btn-teal" href="./wiki.html">探索 16 篇互動 Wiki</a>
+        <a class="btn" href="./workflow.html">檢視 Loop / Graph 與反思</a>
+      </div>
+    </section>
+
+    <section class="stats-strip" id="portal-stats">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-raw">6 篇</div>
+        <div class="stat-label">Layer 1 唯讀原始文獻 (raw/)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-wiki">16 篇</div>
+        <div class="stat-label">Layer 2 互連概念 Wiki (wiki/)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-slides">14 頁</div>
+        <div class="stat-label">5 單元教學型互動簡報</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-links">83 條</div>
+        <div class="stat-label">雙向 [[wikilink]] 零斷鏈</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-gates">4 Gates</div>
+        <div class="stat-label">前置 + 單頁 + 實機驗證關卡</div>
+      </div>
+    </section>
+
+    <section class="portal-grid">
+      <a class="portal-card" href="./slides.html">
+        <div>
+          <span class="portal-card-tag">Deliverable 01 · Interactive Deck</span>
+          <h2>教學型 HTML 簡報</h2>
+          <p>專為零基礎初學者設計的 5 單元 14 頁簡報，內建書桌模擬器、U 型曲線實驗、四大失效診斷卡與情境小測驗，每頁底部皆可一鍵點開對應 Wiki 溯源。</p>
+        </div>
+        <span class="portal-card-cta">進入簡報模式 (支援方向鍵) →</span>
+      </a>
+
+      <a class="portal-card" href="./wiki.html">
+        <div>
+          <span class="portal-card-tag">Deliverable 02 · Knowledge Base</span>
+          <h2>互動式 LLM Wiki 知識庫</h2>
+          <p>完整呈現 <code>discussion/</code>、<code>SCHEMA.md</code>、<code>index.md</code>、<code>log.md</code>、16 篇 <code>wiki/</code> 與 6 篇 <code>raw/</code>，支援全文搜尋、雙向反向連結與 Raw→Wiki→Slide 知識圖譜。</p>
+        </div>
+        <span class="portal-card-cta">打開知識庫與圖譜 →</span>
+      </a>
+
+      <a class="portal-card" href="./workflow.html">
+        <div>
+          <span class="portal-card-tag">Deliverable 03 · Loop &amp; Reflection</span>
+          <h2>Loop / Graph 設計與反思</h2>
+          <p>圖解「先討論、後生成」與「v1 → v2 前移檢查狀態圖」的運作迴圈，並完整公開 Run #1 到 Run #2 的機器審計紀錄與實機檢測修正。</p>
+        </div>
+        <span class="portal-card-cta">閱讀架構與實測紀錄 →</span>
+      </a>
+
+      <a class="portal-card" href="https://github.com/MiuDog/taica-lab10-llm-wiki" target="_blank" rel="noopener noreferrer">
+        <div>
+          <span class="portal-card-tag">Open Source · GitHub Repo</span>
+          <h2>完整原始碼與驗證管線</h2>
+          <p>公開瀏覽 <code>raw/</code>、<code>wiki/</code>、<code>pipeline/*.py</code>（4 道檢查腳本）、<code>logs/</code> 真實執行紀錄與 <code>SUBMISSION.md</code>。</p>
+        </div>
+        <span class="portal-card-cta">前往 GitHub Public Repo ↗</span>
+      </a>
+    </section>
+
+    <section class="section-card">
+      <h2>簡報 5 單元教學路線與 Wiki 對應預覽</h2>
+      <p>為了讓原本不熟悉 AI Agent 的人循序漸進建立正確觀念，大綱先經 <code>Gate 2: OutlineGate</code> 鎖定先修順序（DAG）後才生成各頁內容：</p>
+      <div id="portal-unit-preview" class="cards-row"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    Context Engineering LLM Wiki · 依 Karpathy 三層知識庫架構與自動化驗證管線建構
+  </footer>
+
+  <script src="./assets/wiki-data.js"></script>
+  <script>
+    (function () {
+      const data = window.SITE_DATA;
+      if (!data) return;
+      document.getElementById("stat-raw").textContent = data.meta.raw_count + " 篇";
+      document.getElementById("stat-wiki").textContent = data.meta.wiki_count + " 篇";
+      document.getElementById("stat-slides").textContent = data.meta.slide_count + " 頁";
+      document.getElementById("stat-links").textContent = data.meta.wikilink_count + " 條";
+
+      const units = new Map();
+      for (const s of data.deck.slides || []) {
+        const key = s.unit_num + "::" + s.unit_name;
+        if (!units.has(key)) units.set(key, []);
+        units.get(key).push(s);
+      }
+      const container = document.getElementById("portal-unit-preview");
+      container.innerHTML = Array.from(units.entries()).map(([k, list]) => {
+        const [, name] = k.split("::");
+        const links = list.map(s =>
+          `<li><a href="./slides.html#${s.id}">${s.title}</a></li>`
+        ).join("");
+        return `<div class="mini-card">
+          <h3>${name}</h3>
+          <ul style="margin:0;padding-left:1.1rem;font-size:0.88rem;">${links}</ul>
+        </div>`;
+      }).join("");
+    })();
+  </script>
+</body>
+</html>

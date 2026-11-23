@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loop / Graph 設計、實測紀錄與反思 — Context Engineering</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2314213d'/><text x='16' y='21' text-anchor='middle' font-size='14' font-weight='bold' fill='white' font-family='sans-serif'>CE</text></svg>">
+  <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+  <header class="site-nav">
+    <div class="site-nav-inner">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">CE</span>
+        <span>LLM Wiki × Context Engineering</span>
+      </a>
+      <nav class="nav-links" aria-label="主導覽">
+        <a class="nav-link" href="./index.html">專案首頁</a>
+        <a class="nav-link" href="./slides.html">教學簡報</a>
+        <a class="nav-link" href="./wiki.html">互動 Wiki</a>
+        <a class="nav-link active" href="./workflow.html">Loop / Graph 與反思</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero-block">
+      <span class="eyebrow">Step 3 &amp; Step 4 · Loop / Graph Architecture &amp; Reflection</span>
+      <h1>Loop / Graph 設計、實測檢查紀錄與前移反思</h1>
+      <p class="hero-lead">
+        這份網頁完整公開本作業如何用雙迴圈（<strong>知識編譯迴圈</strong> + <strong>簡報生成與前移檢查狀態圖</strong>）產出教學簡報，並記錄從 <strong>v1 初版線性流程失敗</strong>演進到 <strong>v2 前移檢查（Shift-Left）狀態圖</strong>的真實審計數據。
+      </p>
+    </section>
+
+    <section class="section-card">
+      <div class="graph-toolbar">
+        <div>
+          <h2 style="margin:0;">一、雙迴圈互動架構圖（點擊任一節點檢視職責與重試規則）</h2>
+          <p style="margin:0.25rem 0 0;font-size:0.92rem;color:var(--ink-muted);">上方為 <strong>Loop A（Wiki 建庫迴圈）</strong>，下方可切換比較 <strong>v1 初版線性管線</strong> 與 <strong>v2 前移檢查狀態圖</strong>。</p>
+        </div>
+        <div style="display:flex;gap:0.5rem;">
+          <button class="btn btn-sm" id="btn-graph-v1">檢視 v1 初版線性管線</button>
+          <button class="btn btn-sm btn-primary" id="btn-graph-v2">檢視 v2 前移檢查狀態圖</button>
+        </div>
+      </div>
+
+      <div class="svg-frame">
+        <svg id="workflow-graph-svg" viewBox="0 0 980 420" width="100%" style="min-width:740px;display:block;"></svg>
+      </div>
+
+      <div class="node-inspector" id="node-inspector">
+        <strong>節點檢查器：</strong>點擊上方流程圖中任意方框，即可查看該節點的輸入、輸出、檢查條件與失敗回退路徑。
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>二、流程設計說明（回答作業步驟三）</h2>
+      <div class="two-col">
+        <div>
+          <h3>1. 資訊如何取得、整理、檢查與生成？</h3>
+          <ol style="padding-left:1.25rem;">
+            <li><strong>取得資料（Discuss + Raw）</strong>：先寫定 <code>discussion/00-discuss-before-generate.md</code>，再收集 6 篇真實一手來源存入唯讀 <code>raw/</code>。</li>
+            <li><strong>整理編譯（Ingest Loop）</strong>：依 <code>SCHEMA.md</code> 逐篇抽取概念，建立或更新 16 篇 <code>wiki/*.md</code>，同步 <code>index.md</code> 與 <code>log.md</code>。</li>
+            <li><strong>知識健檢（Gate 1: WikiLint）</strong>：自動化腳本驗證 Frontmatter、83 條 <code>[[wikilink]]</code> 零斷鏈、零孤島、索引同步與來源一致。</li>
+            <li><strong>大綱前移檢查（Gate 2: OutlineGate）</strong>：先鎖定投影片頁數、先修順序 DAG、單頁字數上限與覆蓋率，才允許寫投影片正文。</li>
+            <li><strong>逐頁溯源與實機檢查（Gate 3 &amp; 4）</strong>：每頁獨立比對 Citation Drift、術語先後順序、初學者字數負荷，並用 Playwright 以 <code>1280×720</code> 實機走訪確認零裁切、零 JS 錯。</li>
+          </ol>
+        </div>
+        <div>
+          <h3>2. 重複步驟、重做節點與設計理由</h3>
+          <ul>
+            <li><strong>哪些步驟會重複執行？</strong>
+              <ul>
+                <li><strong>Ingest 迴圈</strong>：針對 <code>SRC-01</code>～<code>SRC-06</code> 反覆執行「讀檔 → 寫 Wiki → 更新索引與日誌 → 執行 <code>WikiLint</code>」。</li>
+                <li><strong>單頁生成與修正迴圈</strong>：任一投影片若在 <code>SlideGate</code> 或 <code>BrowserGate</code> 失敗，僅重寫該頁草稿再重驗，避免污染乾淨頁。</li>
+              </ul>
+            </li>
+            <li><strong>為什麼要這樣設計？</strong>
+              <p style="margin:0.4rem 0 0;">這正是本專案主題 <strong>Context Engineering</strong> 的親身實踐：用 <code>index.md</code> 做 <em>Select</em>、把規格與草稿存為檔案做 <em>Write</em>、將四個檢查拆成獨立腳本節點做 <em>Isolate</em>，從根本避免把全部原始文章塞進同一個長 Prompt 造成的 Context Rot 與幻覺漂移。</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <details style="margin-top:1rem;">
+        <summary style="cursor:pointer;font-weight:700;color:var(--ink-primary);">展開檢視 Mermaid 狀態圖原始碼（對應 SUBMISSION.md）</summary>
+        <pre><code id="mermaid-source-block">flowchart TD
+  D["先討論定案 discussion/"] --> IN["Ingest 迴圈: raw/ (6篇) -> wiki/ (16篇)"]
+  IN --> G1{"Gate 1: WikiLintGate\n斷鏈/孤島/索引/來源"}
+  G1 -- "FAIL: 補齊連結或摘要" --> IN
+  G1 -- "PASS" --> OL["規劃簡報大綱 outline.json"]
+  OL --> G2{"Gate 2: OutlineGate (前移檢查)\n先修順序 DAG + 字數預算 + 覆蓋率"}
+  G2 -- "FAIL: 調整頁序與預算" --> OL
+  G2 -- "PASS" --> DR["逐頁生成 slides.json (附 wiki_refs &amp; source_refs)"]
+  DR --> G3{"Gate 3: SlideGate\nCitation Drift / 密度 / 術語順序"}
+  G3 -- "FAIL: 僅重寫不合格頁" --> DR
+  G3 -- "PASS" --> BS["build_site.py 編譯靜態網站 docs/"]
+  BS --> G4{"Gate 4: BrowserGate (Playwright)\n1280x720 零溢出 + 互動元件實測"}
+  G4 -- "FAIL: 調整排版或精簡內文" --> DR
+  G4 -- "PASS" --> PUB["公開發佈 GitHub Pages"]</code></pre>
+      </details>
+    </section>
+
+    <section class="section-card">
+      <h2>三、一次實際執行與修正紀錄（Run #1 v1 → Run #2 v2）</h2>
+      <p>以下數據由 <code>pipeline/run_pipeline.py</code> 與 <code>pipeline/browser_gate.py</code> 真實執行並自動輸出至 <code>logs/</code>：</p>
+      <div id="audit-runs-container"></div>
+    </section>
+
+    <section class="section-card">
+      <h2>四、深度反思（回答作業步驟四）</h2>
+      <div class="callout-warn" style="margin-bottom:1rem;">
+        <strong>1. 哪一個節點最常出錯？</strong><br>
+        <strong>「草稿生成節點（DraftSlides）」</strong>最常出錯，在 Run #1 (v1) 實測中一次出現了三類典型錯誤：
+        <ul style="margin:0.4rem 0 0;">
+          <li><strong>初學者資訊過載與舞台溢出</strong>：第 3 頁塞入過多長段落卡片（超過字數預算），在 <code>1280×720</code> 實機檢測下導致舞台垂直溢出。</li>
+          <li><strong>先修術語順序倒置（Jargon Before Intro）</strong>：第 2 頁尚未解釋 <code>KV-Cache</code> 與 <code>Compaction</code> 的意思就直接丟出英文術語，破壞零基礎體驗。</li>
+          <li><strong>來源引用漂移（Citation Drift）</strong>：第 5 頁只綁定了介紹失效模式的 Wiki 頁（<code>SRC-02</code>、<code>SRC-05</code>），卻在簡報出處誤植未出現在該 Wiki 的 <code>[SRC-04]</code>。</li>
+        </ul>
+      </div>
+
+      <div class="callout-info">
+        <strong>2. 發現問題後，把檢查往前移到了哪一個步驟？為什麼因此修改 Workflow / Graph？</strong><br>
+        在 <strong>v1 初版線性管線</strong>中，檢查全擠在最後生成完才做，每次發現「順序講反」或「單頁太擠」就得重寫好多頁（返工成本極高）。<br>
+        因此我們在 <strong>v2 流程圖</strong>中將 Workflow 改為帶有<strong>前置攔截關卡（Shift-Left Gate）與局部重試迴圈的狀態圖</strong>：
+        <ol style="margin:0.45rem 0 0;">
+          <li>把「來源完整性與 Wikilink 健康度」提前到 <code>Gate 1: WikiLintGate</code>，確保知識庫本身不帶毒（Prevent Context Poisoning）。</li>
+          <li>把「先修順序 DAG、單頁字數上限（<= 450 字）與覆蓋率檢查」大幅前移到寫內文之前的 <code>Gate 2: OutlineGate</code>，讓 AI 寫正文前就被鎖死教學順序與版面預算。</li>
+          <li>在 <code>Gate 3: SlideGate</code> 加入逐頁溯源與術語順序檢查，並在最後補上 <code>Gate 4: BrowserGate</code> 實機瀏覽器檢驗。結果在 Run #2 (v2) 中，全部 4 道關卡與 14 頁 <code>1280×720</code> 渲染皆達到 <strong>0 錯誤通過</strong>。</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    所有審計數據皆由 <code>pipeline/run_pipeline.py</code> 真實生成，原始 JSON 與 Markdown 報告位於 repo <code>logs/</code> 目錄。
+  </footer>
+
+  <script src="./assets/wiki-data.js"></script>
+  <script src="./assets/workflow-app.js"></script>
+</body>
+</html>

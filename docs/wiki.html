@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>互動式 LLM Wiki 知識庫 — Context Engineering</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2314213d'/><text x='16' y='21' text-anchor='middle' font-size='14' font-weight='bold' fill='white' font-family='sans-serif'>CE</text></svg>">
+  <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+  <header class="site-nav">
+    <div class="site-nav-inner">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">CE</span>
+        <span>LLM Wiki × Context Engineering</span>
+      </a>
+      <nav class="nav-links" aria-label="主導覽">
+        <a class="nav-link" href="./index.html">專案首頁</a>
+        <a class="nav-link" href="./slides.html">教學簡報</a>
+        <a class="nav-link active" href="./wiki.html">互動 Wiki</a>
+        <a class="nav-link" href="./workflow.html">Loop / Graph 與反思</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wiki-layout">
+    <aside class="wiki-sidebar">
+      <input type="search" id="wiki-search" class="wiki-search" placeholder="搜尋概念、術語或 SRC-01...">
+      <button class="btn btn-sm btn-teal" id="btn-toggle-graph" style="width:100%;justify-content:center;margin-bottom:0.5rem;">
+        切換知識圖譜 (Raw → Wiki → Slides)
+      </button>
+      <div id="wiki-nav-tree"></div>
+    </aside>
+
+    <main class="wiki-main">
+      <section id="wiki-article-view">
+        <div class="wiki-doc-meta" id="wiki-doc-meta"></div>
+        <article class="wiki-article">
+          <h1 id="wiki-doc-title">載入中...</h1>
+          <p id="wiki-doc-summary" style="color:var(--ink-muted);font-weight:600;"></p>
+          <div id="wiki-doc-body"></div>
+        </article>
+
+        <section class="backlinks-panel" id="wiki-backlinks-panel">
+          <div class="backlink-box">
+            <h4>哪些 Wiki / 概念連向本頁（Backlinks）</h4>
+            <div class="backlink-list" id="backlinks-wiki-list"></div>
+          </div>
+          <div class="backlink-box">
+            <h4>哪些教學投影片引用了本頁（點擊跳頁）</h4>
+            <div class="backlink-list" id="backlinks-slide-list"></div>
+          </div>
+        </section>
+      </section>
+
+      <section id="wiki-graph-view" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;margin-bottom:1rem;">
+          <div>
+            <h2 style="margin:0;color:var(--ink-primary);">三層知識溯源圖譜（Raw → Wiki → Slides）</h2>
+            <p style="margin:0.25rem 0 0;font-size:0.9rem;color:var(--ink-muted);">滑鼠移至任意節點高亮相依關係；點擊 Raw / Wiki 節點打開頁面，點擊 Slide 節點直達該頁簡報。</p>
+          </div>
+          <button class="btn btn-sm" id="btn-back-article">返回文章閱讀</button>
+        </div>
+        <div class="svg-frame">
+          <svg id="knowledge-graph-svg" viewBox="0 0 980 620" width="100%" style="min-width:740px;display:block;"></svg>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./assets/wiki-data.js"></script>
+  <script src="./assets/wiki-app.js"></script>
+</body>
+</html>

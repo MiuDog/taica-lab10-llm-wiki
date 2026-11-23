@@ -1,0 +1,599 @@
+{
+  "run_label": "Run #2 (v2 前移檢查狀態圖)",
+  "mode": "v2",
+  "timestamp": "2026-11-23T14:43:47+08:00",
+  "slides_file": "data/slides-v2.json",
+  "overall_passed": true,
+  "total_issues": 0,
+  "gates": {
+    "wiki_lint": {
+      "gate": "Gate 1: WikiLintGate",
+      "passed": true,
+      "checks": [
+        {
+          "id": "G1-RAW-COUNT",
+          "name": "原始資料數量 >= 5",
+          "passed": true,
+          "detail": "共收錄 6 篇唯讀原始來源 (SRC-01, SRC-02, SRC-03, SRC-04, SRC-05, SRC-06)。"
+        },
+        {
+          "id": "G1-DISCUSS-EXIST",
+          "name": "治理規格與先討論紀錄齊備",
+          "passed": true,
+          "detail": "SCHEMA.md 與 discussion/00-discuss-before-generate.md 皆存在且具完整設計決策。"
+        },
+        {
+          "id": "G1-FRONTMATTER",
+          "name": "Wiki YAML Frontmatter 完整性",
+          "passed": true,
+          "detail": "全數 16 篇 Wiki 欄位與 ID 皆有效。"
+        },
+        {
+          "id": "G1-WIKILINKS",
+          "name": "Wikilinks 零斷鏈驗證",
+          "passed": true,
+          "detail": "檢查 83 條內部連結，0 斷鏈。"
+        },
+        {
+          "id": "G1-ORPHANS",
+          "name": "零孤島頁面驗證",
+          "passed": true,
+          "detail": "全數 16 篇頁面皆具雙向入度 >= 1。"
+        },
+        {
+          "id": "G1-INDEX-SYNC",
+          "name": "index.md 與 Wiki 雙向同步",
+          "passed": true,
+          "detail": "index.md 與 16 篇 wiki/*.md 目錄及單行摘要 100% 同步。"
+        },
+        {
+          "id": "G1-SOURCE-GROUNDING",
+          "name": "原始資料來源真實性驗證",
+          "passed": true,
+          "detail": "每篇 Wiki 頁面皆具真實 [SRC-XX] 標註且與 raw/ 及 frontmatter 一致。"
+        },
+        {
+          "id": "G1-LOG-AUDIT",
+          "name": "log.md 審計軌跡完整性",
+          "passed": true,
+          "detail": "log.md 已完整記錄 discuss 與全部 6 篇 ingest 事件。"
+        }
+      ],
+      "issues": [],
+      "stats": {
+        "raw_count": 6,
+        "wiki_count": 16,
+        "wikilink_count": 83,
+        "orphan_count": 0
+      }
+    },
+    "outline_gate": {
+      "gate": "Gate 2: OutlineGate",
+      "outline_file": "data/outline-v2.json",
+      "passed": true,
+      "checks": [
+        {
+          "id": "G2-SLIDE-COUNT",
+          "name": "投影片總頁數合理 (10~16 頁)",
+          "passed": true,
+          "detail": "大綱共規劃 14 頁投影片（適合 15~20 分鐘零基礎教學）。"
+        },
+        {
+          "id": "G2-WIKI-MAPPING",
+          "name": "每頁大綱明確綁定 Wiki 與 Raw 來源",
+          "passed": true,
+          "detail": "全數 14 頁大綱皆綁定有效 wiki_refs 與 source_refs。"
+        },
+        {
+          "id": "G2-PREREQ-DAG",
+          "name": "先修概念依賴圖（Prerequisite DAG）驗證",
+          "passed": true,
+          "detail": "全數 5 組先修概念依賴順序正確無倒置。"
+        },
+        {
+          "id": "G2-CHAR-BUDGET",
+          "name": "單頁字數與要點密度預算鎖定",
+          "passed": true,
+          "detail": "全數投影片大綱皆已鎖定單頁密度上限（一般頁 <= 450 字、要點 <= 5）。"
+        },
+        {
+          "id": "G2-COVERAGE",
+          "name": "Wiki 與 Raw 來源覆蓋率達標",
+          "passed": true,
+          "detail": "覆蓋 16/16 篇 Wiki (100%) 及 6/6 篇 Raw (100%)。"
+        }
+      ],
+      "issues": [],
+      "stats": {
+        "slide_count": 14,
+        "wiki_coverage": "16/16",
+        "source_coverage": "6/6"
+      }
+    },
+    "slide_gate": {
+      "gate": "Gate 3: SlideGate",
+      "slides_file": "data/slides-v2.json",
+      "passed": true,
+      "checks": [
+        {
+          "id": "G3-WIKI-REFS-VALID",
+          "name": "每頁皆有效連結 Wiki 知識頁",
+          "passed": true,
+          "detail": "全數 14 頁皆綁定有效 wiki_refs。"
+        },
+        {
+          "id": "G3-SOURCE-CONSISTENCY",
+          "name": "無來源引用漂移（Citation Drift）",
+          "passed": true,
+          "detail": "全數 14 頁之 source_refs 與其所引 Wiki 之來源 100% 一致。"
+        },
+        {
+          "id": "G3-KEY-TERM-GROUNDED",
+          "name": "核心術語完全溯源於所引 Wiki",
+          "passed": true,
+          "detail": "每頁核心術語皆實際存在於對應 Wiki 頁面，無外部幻覺概念。"
+        },
+        {
+          "id": "G3-BEGINNER-DENSITY",
+          "name": "初學者字數與要點密度不超載",
+          "passed": true,
+          "detail": "全數 14 頁皆符合單頁字數上限與 <= 5 要點規範。"
+        },
+        {
+          "id": "G3-JARGON-ORDER",
+          "name": "專有名詞先解釋後登場順序檢查",
+          "passed": true,
+          "detail": "全數追蹤專有名詞皆於首次白話定義頁（含）之後才使用。"
+        },
+        {
+          "id": "G3-SPEAKER-NOTES",
+          "name": "每頁皆附白話演講備忘錄",
+          "passed": true,
+          "detail": "全數 14 頁均附完整講者備忘錄。"
+        }
+      ],
+      "issues": [],
+      "per_slide": [
+        {
+          "index": 1,
+          "id": "slide-1",
+          "title": "為什麼只學「寫好一句 Prompt」已經不夠了？",
+          "chars": 215,
+          "max_chars": 400,
+          "bullets": 4,
+          "max_bullets": 4,
+          "wiki_refs": [
+            "overview-context-engineering"
+          ],
+          "source_refs": [
+            "SRC-03",
+            "SRC-05"
+          ]
+        },
+        {
+          "index": 2,
+          "id": "slide-2",
+          "title": "先把 AI 想成 CPU，對話視窗就是它的書桌（RAM）",
+          "chars": 251,
+          "max_chars": 400,
+          "bullets": 3,
+          "max_bullets": 4,
+          "wiki_refs": [
+            "cpu-ram-mental-model"
+          ],
+          "source_refs": [
+            "SRC-03",
+            "SRC-06"
+          ]
+        },
+        {
+          "index": 3,
+          "id": "slide-3",
+          "title": "Prompt Engineering vs Context Engineering 差在哪？",
+          "chars": 325,
+          "max_chars": 420,
+          "bullets": 3,
+          "max_bullets": 5,
+          "wiki_refs": [
+            "prompt-vs-context-engineering"
+          ],
+          "source_refs": [
+            "SRC-03",
+            "SRC-05"
+          ]
+        },
+        {
+          "index": 4,
+          "id": "slide-4",
+          "title": "注意力預算有限：小心「中間迷失（Lost in the Middle）」",
+          "chars": 289,
+          "max_chars": 420,
+          "bullets": 3,
+          "max_bullets": 4,
+          "wiki_refs": [
+            "attention-budget-and-context-rot",
+            "lost-in-the-middle"
+          ],
+          "source_refs": [
+            "SRC-01",
+            "SRC-05"
+          ]
+        },
+        {
+          "index": 5,
+          "id": "slide-5",
+          "title": "書桌亂掉的 4 種病症：長上下文四大失效模式",
+          "chars": 355,
+          "max_chars": 420,
+          "bullets": 4,
+          "max_bullets": 4,
+          "wiki_refs": [
+            "context-failure-modes"
+          ],
+          "source_refs": [
+            "SRC-02",
+            "SRC-05"
+          ]
+        },
+        {
+          "index": 6,
+          "id": "slide-6",
+          "title": "治本只需記住 4 個動詞：WSCI 四大工程策略",
+          "chars": 389,
+          "max_chars": 400,
+          "bullets": 4,
+          "max_bullets": 4,
+          "wiki_refs": [
+            "four-strategies-wsci"
+          ],
+          "source_refs": [
+            "SRC-03",
+            "SRC-05"
+          ]
+        },
+        {
+          "index": 7,
+          "id": "slide-7",
+          "title": "Write（筆記放硬碟）× Select（按目錄即時拿）",
+          "chars": 324,
+          "max_chars": 420,
+          "bullets": 2,
+          "max_bullets": 4,
+          "wiki_refs": [
+            "strategy-write-offload",
+            "strategy-select-retrieval"
+          ],
+          "source_refs": [
+            "SRC-02",
+            "SRC-03",
+            "SRC-05"
+          ]
+        },
+        {
+          "index": 8,
+          "id": "slide-8",
+          "title": "Compress（高保真壓縮）× Isolate（小幫手隔壁桌隔離）",
+          "chars": 354,
+          "max_chars": 420,
+          "bullets": 2,
+          "max_bullets": 4,
+          "wiki_refs": [
+            "strategy-compress-compaction",
+            "strategy-isolate-subagents"
+          ],
+          "source_refs": [
+            "SRC-02",
+            "SRC-03",
+            "SRC-05"
+          ]
+        },
+        {
+          "index": 9,
+          "id": "slide-9",
+          "title": "系統提示寫多細才剛好？Anthropic 的 Right Altitude 原則",
+          "chars": 326,
+          "max_chars": 420,
+          "bullets": 3,
+          "max_bullets": 4,
+          "wiki_refs": [
+            "right-altitude-prompting"
+          ],
+          "source_refs": [
+            "SRC-05"
+          ]
+        },
+        {
+          "index": 10,
+          "id": "slide-10",
+          "title": "Manus 上線後的 5 個反直覺生產實戰教訓",
+          "chars": 373,
+          "max_chars": 450,
+          "bullets": 5,
+          "max_bullets": 5,
+          "wiki_refs": [
+            "production-lessons-manus"
+          ],
+          "source_refs": [
+            "SRC-04"
+          ]
+        },
+        {
+          "index": 11,
+          "id": "slide-11",
+          "title": "從「臨時拼碎片 (RAG)」升級為「LLM Wiki 知識庫」",
+          "chars": 401,
+          "max_chars": 430,
+          "bullets": 4,
+          "max_bullets": 5,
+          "wiki_refs": [
+            "llm-wiki-pattern",
+            "rag-vs-llm-wiki"
+          ],
+          "source_refs": [
+            "SRC-01",
+            "SRC-05",
+            "SRC-06"
+          ]
+        },
+        {
+          "index": 12,
+          "id": "slide-12",
+          "title": "這份簡報自己怎麼誕生？先討論、Wiki 編譯與前移檢查",
+          "chars": 349,
+          "max_chars": 420,
+          "bullets": 3,
+          "max_bullets": 4,
+          "wiki_refs": [
+            "llm-wiki-pattern",
+            "glossary-for-beginners"
+          ],
+          "source_refs": [
+            "SRC-06"
+          ]
+        },
+        {
+          "index": 13,
+          "id": "slide-13",
+          "title": "動手診斷看看！初學者 3 題情境挑戰",
+          "chars": 126,
+          "max_chars": 550,
+          "bullets": 0,
+          "max_bullets": 3,
+          "wiki_refs": [
+            "lost-in-the-middle",
+            "context-failure-modes",
+            "production-lessons-manus"
+          ],
+          "source_refs": [
+            "SRC-01",
+            "SRC-02",
+            "SRC-04"
+          ]
+        },
+        {
+          "index": 14,
+          "id": "slide-14",
+          "title": "全 14 頁簡報 ↔ Wiki ↔ 原始文獻完整溯源總表",
+          "chars": 113,
+          "max_chars": 550,
+          "bullets": 0,
+          "max_bullets": 4,
+          "wiki_refs": [
+            "overview-context-engineering",
+            "glossary-for-beginners"
+          ],
+          "source_refs": [
+            "SRC-01",
+            "SRC-02",
+            "SRC-03",
+            "SRC-04",
+            "SRC-05",
+            "SRC-06"
+          ]
+        }
+      ],
+      "stats": {
+        "slide_count": 14,
+        "issue_count": 0,
+        "max_slide_chars": 401
+      }
+    },
+    "browser_gate": {
+      "gate": "Gate 4: BrowserVisualGate",
+      "mode": "v2",
+      "passed": true,
+      "checks": [
+        {
+          "id": "B4-INDEX-PORTAL",
+          "name": "入口頁 (index.html) 載入與排版",
+          "passed": true,
+          "detail": "H1='Context Engineering（上下文工程）：\n用 LLM Wiki 打造可溯源的教學 HTML 簡報'，導覽卡片=4，水平溢出=False。"
+        },
+        {
+          "id": "B4-SLIDES-1280X720",
+          "name": "1280×720 全 14 頁投影片零裁切零溢出",
+          "passed": true,
+          "detail": "實測全部 14 頁皆零垂直/水平溢出。"
+        },
+        {
+          "id": "B4-SLIDES-INTERACT",
+          "name": "簡報互動元件與 Wiki 溯源抽屜驗證",
+          "passed": true,
+          "detail": "溯源抽屜=OK；書桌模擬器=OK；U型曲線互動=OK；小測驗回饋=OK"
+        },
+        {
+          "id": "B4-WIKI-READER",
+          "name": "互動式 Wiki 閱讀器、雙向連結與知識圖譜",
+          "passed": true,
+          "detail": "側欄條目=26，點擊 [[wikilink]] 切換=True，知識圖譜節點=36。"
+        },
+        {
+          "id": "B4-WORKFLOW-PAGE",
+          "name": "Loop/Graph 架構圖與執行反思報告頁",
+          "passed": true,
+          "detail": "SVG 流程節點框=9，審計對比表已渲染。"
+        },
+        {
+          "id": "B4-MOBILE-RWD",
+          "name": "行動端 390×844 RWD 零水平溢出",
+          "passed": true,
+          "detail": "index溢出=False，slides閱讀模式溢出=False。"
+        },
+        {
+          "id": "B4-ZERO-JS-ERRORS",
+          "name": "全站 0 Console / Page JS 錯誤",
+          "passed": true,
+          "detail": "Console errors=0, Page errors=0。"
+        }
+      ],
+      "issues": [],
+      "slide_measurements": [
+        {
+          "slide": 1,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 2,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 3,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 4,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 5,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 6,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 7,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 8,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 9,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 10,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 11,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 12,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 13,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 14,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        }
+      ],
+      "stats": {
+        "total_slides_checked": 14,
+        "overflow_slide_count": 0
+      }
+    }
+  },
+  "issues": []
+}

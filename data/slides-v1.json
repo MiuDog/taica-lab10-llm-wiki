@@ -1,0 +1,121 @@
+{
+  "version": "v1",
+  "title": "Context Engineering 入門簡報（v1 初版線性草稿）",
+  "slides": [
+    {
+      "id": "slide-1",
+      "unit_num": 1,
+      "unit_name": "Unit 1 · 基礎與問題",
+      "layout": "hero",
+      "title": "認識 Context Engineering（上下文工程）",
+      "subtitle": "v1 初版草稿：直接從筆記一次生成投影片",
+      "hook": "幫 AI 在思考前整理乾淨輸入視窗裡的資訊，避免它忘東忘西。",
+      "bullets": [
+        "這份簡報涵蓋 Context Engineering 定義、失效原因與實戰策略。"
+      ],
+      "cards": [
+        { "title": "心智模型", "desc": "LLM 是 CPU，視窗是 RAM" },
+        { "title": "問題成因", "desc": "注意力攤薄與雜訊" },
+        { "title": "四大策略", "desc": "Write/Select/Compress/Isolate" },
+        { "title": "知識系統", "desc": "用 LLM Wiki 取代碎片 RAG" }
+      ],
+      "takeaway": "好的輸出不只靠一句 Prompt，更靠整理整段上下文。",
+      "wiki_refs": ["overview-context-engineering"],
+      "source_refs": ["SRC-03", "SRC-05"],
+      "grounded_terms": ["Context Engineering", "AI Agent"],
+      "introduces_terms": ["Context Engineering"],
+      "speaker_notes": "開場介紹為什麼進入 AI Agent 時代後大家開始重視上下文工程。",
+      "max_chars": 450,
+      "max_bullets": 5
+    },
+    {
+      "id": "slide-2",
+      "unit_num": 1,
+      "unit_name": "Unit 1 · 基礎與問題",
+      "layout": "desk_sim",
+      "title": "AI 的書桌（RAM）為什麼會塞爆？",
+      "subtitle": "初學者還沒聽過 KV-Cache 或 Compaction 就直接出現",
+      "hook": "LLM 就像 CPU，Context Window 是有限的書桌；沒做 Compaction 或顧好 KV-Cache 就會變慢又變笨。",
+      "bullets": [
+        { "label": "有限工作記憶體", "text": "書桌上堆滿舊聊天與文件會引發 Attention Budget 不足。" },
+        { "label": "快取與壓縮陷阱", "text": "如果沒有做好 Compaction 與維護 KV-Cache，長對話很快出現 Context Rot。" }
+      ],
+      "takeaway": "別把整座圖書館一次倒在 AI 書桌上。",
+      "wiki_refs": ["cpu-ram-mental-model", "attention-budget-and-context-rot"],
+      "source_refs": ["SRC-03", "SRC-05"],
+      "grounded_terms": ["CPU", "RAM", "Attention Budget", "Context Rot"],
+      "introduces_terms": ["Attention Budget", "Context Rot"],
+      "speaker_notes": "本頁示範初版尚未經過術語順序檢查時，第 2 頁就提前丟出 KV-Cache 與 Compaction 的情況。",
+      "max_chars": 420,
+      "max_bullets": 5
+    },
+    {
+      "id": "slide-3",
+      "unit_num": 2,
+      "unit_name": "Unit 2 · 過度擁擠的一頁（示範溢出）",
+      "layout": "concept_cards",
+      "title": "長上下文退化、Lost in the Middle 與全部對策一次塞完",
+      "subtitle": "v1 初版因為沒在 OutlineGate 限制字數，把過多細節硬塞在同一張投影片",
+      "hook": "當初學者同時看到研究數據、四種故障名稱加上四種工程名詞時，會發生嚴重認知過載。",
+      "cards": [
+        {
+          "title": "1. U 型記憶曲線與首因近因效應",
+          "desc": "Stanford 研究指出放在開頭（Primacy Bias）與結尾（Recency Bias）的資料比較容易記得，放在長篇干擾文件中段的答案準確率會劇烈跌落谷底，甚至低於完全不附任何資料的 Closed-book 基準線，擴大模型視窗或進行指令微調仍無法根治這個問題。"
+        },
+        {
+          "title": "2. Context Poisoning 投毒故障",
+          "desc": "一旦模型產生的幻覺或工具執行失敗的錯誤狀態被寫入工作摘要區，模型就會不斷反覆把這段假設當成既定事實繼續推理，導致長程代理人在錯誤目標上無限打轉。"
+        },
+        {
+          "title": "3. Context Distraction 分心故障",
+          "desc": "對話歷史累積過多瑣碎細節後，模型會過度模仿對話中重複出現的舊有動作模式，忘記原本系統指令寫明的明確邊界規則。"
+        },
+        {
+          "title": "4. Context Confusion 混亂故障",
+          "desc": "同時掛載幾十個相似的 Tool Schemas 與無關文件會讓模型難以抉擇，進而在不需要呼叫工具時強行觸發或呼叫錯的工具。"
+        },
+        {
+          "title": "5. Context Clash 衝突與修補",
+          "desc": "前後兩段規格互相打架時模型會靜默亂猜；必須搭配 Write 卸載筆記、Select 即時檢索與 Tool Loadouts 挑選必要工具，才能讓書桌維持最小高訊號集合。"
+        },
+        {
+          "title": "6. 還有 Compaction 與 Sub-Agent",
+          "desc": "在長任務逼近容量上限時啟動高保真壓縮保留建築決策與未解錯誤，並利用隔離子代理把十萬字探索過程濃縮為一千至兩千字精要回報。"
+        }
+      ],
+      "bullets": [
+        "這張初版投影片刻意呈現字數與卡片過載，用以實測 Gate 3 密度檢查與 Gate 4 1280×720 溢出偵測。"
+      ],
+      "takeaway": "把太多重點塞在同一頁，跟把書桌塞爆一樣讓學習者瞬間失焦。",
+      "wiki_refs": ["lost-in-the-middle", "context-failure-modes", "four-strategies-wsci"],
+      "source_refs": ["SRC-01", "SRC-02", "SRC-03", "SRC-05"],
+      "grounded_terms": ["Lost in the Middle", "Primacy Bias", "Recency Bias", "Context Poisoning", "Tool Loadouts"],
+      "introduces_terms": ["Lost in the Middle", "Primacy Bias", "Recency Bias", "Context Poisoning", "Context Distraction", "Context Confusion", "Context Clash", "Tool Loadouts", "Compaction", "Sub-Agent"],
+      "speaker_notes": "這張初版草稿因為事前沒有做字數預算控制，在 1280×720 視窗肯定會造成垂直裁切溢出。",
+      "max_chars": 420,
+      "max_bullets": 5
+    },
+    {
+      "id": "slide-4",
+      "unit_num": 3,
+      "unit_name": "Unit 3 · 實作與引用檢查",
+      "layout": "concept_cards",
+      "title": "Manus 與系統提示實戰（含 Citation Drift 示範）",
+      "subtitle": "初版誤把其他文章的出處混標進這一頁",
+      "hook": "實作系統時除了注意 Right Altitude，也要注意 KV-Cache 與保留錯誤。",
+      "bullets": [
+        { "label": "Right Altitude", "text": "不要寫過於死板的 if-else，也不寫空泛口號。" },
+        { "label": "KV-Cache 與 todo.md", "text": "保持前綴靜態並用 todo.md 把目標復誦到結尾，別隨意刪掉工具而要使用 Logit Masking。" },
+        { "label": "Structured Note-Taking", "text": "把長程狀態寫在外部筆記檔案與 LLM Wiki 中，透過獨立檢查確保不會出錯。" }
+      ],
+      "takeaway": "若沒有自動化檢查 Citation，AI 寫簡報很容易把來源張冠李戴。",
+      "wiki_refs": ["context-failure-modes"],
+      "source_refs": ["SRC-02", "SRC-04"],
+      "grounded_terms": ["Context Poisoning", "Tool Loadouts"],
+      "introduces_terms": ["Right Altitude", "KV-Cache", "Logit Masking", "Structured Note-Taking", "LLM Wiki"],
+      "speaker_notes": "本頁故意只綁定 context-failure-modes，卻在 source_refs 誤寫了 SRC-04，測試 Gate 3 抓 Citation Drift。",
+      "max_chars": 420,
+      "max_bullets": 5
+    }
+  ]
+}

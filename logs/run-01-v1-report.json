@@ -1,0 +1,368 @@
+{
+  "run_label": "Run #1 (v1 初版線性流程)",
+  "mode": "v1",
+  "timestamp": "2026-11-23T14:43:37+08:00",
+  "slides_file": "data/slides-v1.json",
+  "overall_passed": false,
+  "total_issues": 6,
+  "gates": {
+    "wiki_lint": {
+      "gate": "Gate 1: WikiLintGate",
+      "passed": true,
+      "checks": [
+        {
+          "id": "G1-RAW-COUNT",
+          "name": "原始資料數量 >= 5",
+          "passed": true,
+          "detail": "共收錄 6 篇唯讀原始來源 (SRC-01, SRC-02, SRC-03, SRC-04, SRC-05, SRC-06)。"
+        },
+        {
+          "id": "G1-DISCUSS-EXIST",
+          "name": "治理規格與先討論紀錄齊備",
+          "passed": true,
+          "detail": "SCHEMA.md 與 discussion/00-discuss-before-generate.md 皆存在且具完整設計決策。"
+        },
+        {
+          "id": "G1-FRONTMATTER",
+          "name": "Wiki YAML Frontmatter 完整性",
+          "passed": true,
+          "detail": "全數 16 篇 Wiki 欄位與 ID 皆有效。"
+        },
+        {
+          "id": "G1-WIKILINKS",
+          "name": "Wikilinks 零斷鏈驗證",
+          "passed": true,
+          "detail": "檢查 83 條內部連結，0 斷鏈。"
+        },
+        {
+          "id": "G1-ORPHANS",
+          "name": "零孤島頁面驗證",
+          "passed": true,
+          "detail": "全數 16 篇頁面皆具雙向入度 >= 1。"
+        },
+        {
+          "id": "G1-INDEX-SYNC",
+          "name": "index.md 與 Wiki 雙向同步",
+          "passed": true,
+          "detail": "index.md 與 16 篇 wiki/*.md 目錄及單行摘要 100% 同步。"
+        },
+        {
+          "id": "G1-SOURCE-GROUNDING",
+          "name": "原始資料來源真實性驗證",
+          "passed": true,
+          "detail": "每篇 Wiki 頁面皆具真實 [SRC-XX] 標註且與 raw/ 及 frontmatter 一致。"
+        },
+        {
+          "id": "G1-LOG-AUDIT",
+          "name": "log.md 審計軌跡完整性",
+          "passed": true,
+          "detail": "log.md 已完整記錄 discuss 與全部 6 篇 ingest 事件。"
+        }
+      ],
+      "issues": [],
+      "stats": {
+        "raw_count": 6,
+        "wiki_count": 16,
+        "wikilink_count": 83,
+        "orphan_count": 0
+      }
+    },
+    "outline_gate": {
+      "gate": "Gate 2: OutlineGate",
+      "status": "skipped",
+      "passed": true,
+      "reason": "v1 初版線性管線尚未設計前置大綱與順序檢查，直接從討論跳入草稿生成。",
+      "issues": []
+    },
+    "slide_gate": {
+      "gate": "Gate 3: SlideGate",
+      "slides_file": "data/slides-v1.json",
+      "passed": false,
+      "checks": [
+        {
+          "id": "G3-WIKI-REFS-VALID",
+          "name": "每頁皆有效連結 Wiki 知識頁",
+          "passed": true,
+          "detail": "全數 4 頁皆綁定有效 wiki_refs。"
+        },
+        {
+          "id": "G3-SOURCE-CONSISTENCY",
+          "name": "無來源引用漂移（Citation Drift）",
+          "passed": false,
+          "detail": "slide-4: Citation Drift — 標註了 [SRC-04]，但本頁所引用的 Wiki (context-failure-modes) 只包含 ['SRC-02', 'SRC-05']，未包含 [SRC-04]。"
+        },
+        {
+          "id": "G3-KEY-TERM-GROUNDED",
+          "name": "核心術語完全溯源於所引 Wiki",
+          "passed": true,
+          "detail": "每頁核心術語皆實際存在於對應 Wiki 頁面，無外部幻覺概念。"
+        },
+        {
+          "id": "G3-BEGINNER-DENSITY",
+          "name": "初學者字數與要點密度不超載",
+          "passed": false,
+          "detail": "slide-3: 教學密度超標 — 可見字數 765（上限 420），要點數 7（上限 5），易導致初學者認知過載與 1280×720 溢出。"
+        },
+        {
+          "id": "G3-JARGON-ORDER",
+          "name": "專有名詞先解釋後登場順序檢查",
+          "passed": false,
+          "detail": "slide-1 (第 1 頁): 過早出現未解釋術語 'LLM Wiki'（該術語要到第 4 頁才正式介紹）。; slide-2 (第 2 頁): 過早出現未解釋術語 'Compaction'（該術語要到第 3 頁才正式介紹）。; slide-2 (第 2 頁): 過早出現未解釋術語 'KV-Cache'（該術語要到第 4 頁才正式介紹）。"
+        },
+        {
+          "id": "G3-SPEAKER-NOTES",
+          "name": "每頁皆附白話演講備忘錄",
+          "passed": true,
+          "detail": "全數 4 頁均附完整講者備忘錄。"
+        }
+      ],
+      "issues": [
+        {
+          "gate": "Gate 3 (SlideGate)",
+          "check": "G3-JARGON-ORDER",
+          "slide": "slide-1",
+          "detail": "slide-1 (第 1 頁): 過早出現未解釋術語 'LLM Wiki'（該術語要到第 4 頁才正式介紹）。"
+        },
+        {
+          "gate": "Gate 3 (SlideGate)",
+          "check": "G3-JARGON-ORDER",
+          "slide": "slide-2",
+          "detail": "slide-2 (第 2 頁): 過早出現未解釋術語 'Compaction'（該術語要到第 3 頁才正式介紹）。"
+        },
+        {
+          "gate": "Gate 3 (SlideGate)",
+          "check": "G3-JARGON-ORDER",
+          "slide": "slide-2",
+          "detail": "slide-2 (第 2 頁): 過早出現未解釋術語 'KV-Cache'（該術語要到第 4 頁才正式介紹）。"
+        },
+        {
+          "gate": "Gate 3 (SlideGate)",
+          "check": "G3-BEGINNER-DENSITY",
+          "slide": "slide-3",
+          "detail": "slide-3: 教學密度超標 — 可見字數 765（上限 420），要點數 7（上限 5），易導致初學者認知過載與 1280×720 溢出。"
+        },
+        {
+          "gate": "Gate 3 (SlideGate)",
+          "check": "G3-SOURCE-CONSISTENCY",
+          "slide": "slide-4",
+          "detail": "slide-4: Citation Drift — 標註了 [SRC-04]，但本頁所引用的 Wiki (context-failure-modes) 只包含 ['SRC-02', 'SRC-05']，未包含 [SRC-04]。"
+        }
+      ],
+      "per_slide": [
+        {
+          "index": 1,
+          "id": "slide-1",
+          "title": "認識 Context Engineering（上下文工程）",
+          "chars": 219,
+          "max_chars": 450,
+          "bullets": 5,
+          "max_bullets": 5,
+          "wiki_refs": [
+            "overview-context-engineering"
+          ],
+          "source_refs": [
+            "SRC-03",
+            "SRC-05"
+          ]
+        },
+        {
+          "index": 2,
+          "id": "slide-2",
+          "title": "AI 的書桌（RAM）為什麼會塞爆？",
+          "chars": 217,
+          "max_chars": 420,
+          "bullets": 2,
+          "max_bullets": 5,
+          "wiki_refs": [
+            "cpu-ram-mental-model",
+            "attention-budget-and-context-rot"
+          ],
+          "source_refs": [
+            "SRC-03",
+            "SRC-05"
+          ]
+        },
+        {
+          "index": 3,
+          "id": "slide-3",
+          "title": "長上下文退化、Lost in the Middle 與全部對策一次塞完",
+          "chars": 765,
+          "max_chars": 420,
+          "bullets": 7,
+          "max_bullets": 5,
+          "wiki_refs": [
+            "lost-in-the-middle",
+            "context-failure-modes",
+            "four-strategies-wsci"
+          ],
+          "source_refs": [
+            "SRC-01",
+            "SRC-02",
+            "SRC-03",
+            "SRC-05"
+          ]
+        },
+        {
+          "index": 4,
+          "id": "slide-4",
+          "title": "Manus 與系統提示實戰（含 Citation Drift 示範）",
+          "chars": 279,
+          "max_chars": 420,
+          "bullets": 3,
+          "max_bullets": 5,
+          "wiki_refs": [
+            "context-failure-modes"
+          ],
+          "source_refs": [
+            "SRC-02",
+            "SRC-04"
+          ]
+        }
+      ],
+      "stats": {
+        "slide_count": 4,
+        "issue_count": 5,
+        "max_slide_chars": 765
+      }
+    },
+    "browser_gate": {
+      "gate": "Gate 4: BrowserVisualGate",
+      "mode": "v1",
+      "passed": false,
+      "checks": [
+        {
+          "id": "B4-INDEX-PORTAL",
+          "name": "入口頁 (index.html) 載入與排版",
+          "passed": true,
+          "detail": "H1='Context Engineering（上下文工程）：\n用 LLM Wiki 打造可溯源的教學 HTML 簡報'，導覽卡片=4，水平溢出=False。"
+        },
+        {
+          "id": "B4-SLIDES-1280X720",
+          "name": "1280×720 全 4 頁投影片零裁切零溢出",
+          "passed": false,
+          "detail": "以下頁次在 1280×720 發生內容溢出: S3(stage 613/613, card 587/587, body 520/413)"
+        },
+        {
+          "id": "B4-SLIDES-INTERACT",
+          "name": "簡報互動元件與 Wiki 溯源抽屜驗證",
+          "passed": true,
+          "detail": "溯源抽屜=OK；書桌模擬器=OK"
+        },
+        {
+          "id": "B4-WIKI-READER",
+          "name": "互動式 Wiki 閱讀器、雙向連結與知識圖譜",
+          "passed": true,
+          "detail": "側欄條目=26，點擊 [[wikilink]] 切換=True，知識圖譜節點=26。"
+        },
+        {
+          "id": "B4-WORKFLOW-PAGE",
+          "name": "Loop/Graph 架構圖與執行反思報告頁",
+          "passed": true,
+          "detail": "SVG 流程節點框=9，審計對比表已渲染。"
+        },
+        {
+          "id": "B4-MOBILE-RWD",
+          "name": "行動端 390×844 RWD 零水平溢出",
+          "passed": true,
+          "detail": "index溢出=False，slides閱讀模式溢出=False。"
+        },
+        {
+          "id": "B4-ZERO-JS-ERRORS",
+          "name": "全站 0 Console / Page JS 錯誤",
+          "passed": true,
+          "detail": "Console errors=0, Page errors=0。"
+        }
+      ],
+      "issues": [
+        {
+          "gate": "Gate 4 (BrowserGate)",
+          "check": "B4-SLIDES-1280X720",
+          "detail": "以下頁次在 1280×720 發生內容溢出: S3(stage 613/613, card 587/587, body 520/413)"
+        }
+      ],
+      "slide_measurements": [
+        {
+          "slide": 1,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 2,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        },
+        {
+          "slide": 3,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 520,
+          "body_client_h": 413,
+          "overflow": true
+        },
+        {
+          "slide": 4,
+          "stage_scroll_h": 613,
+          "stage_client_h": 613,
+          "card_scroll_h": 587,
+          "card_client_h": 587,
+          "body_scroll_h": 413,
+          "body_client_h": 413,
+          "overflow": false
+        }
+      ],
+      "stats": {
+        "total_slides_checked": 4,
+        "overflow_slide_count": 1
+      }
+    }
+  },
+  "issues": [
+    {
+      "gate": "Gate 3 (SlideGate)",
+      "check": "G3-JARGON-ORDER",
+      "slide": "slide-1",
+      "detail": "slide-1 (第 1 頁): 過早出現未解釋術語 'LLM Wiki'（該術語要到第 4 頁才正式介紹）。"
+    },
+    {
+      "gate": "Gate 3 (SlideGate)",
+      "check": "G3-JARGON-ORDER",
+      "slide": "slide-2",
+      "detail": "slide-2 (第 2 頁): 過早出現未解釋術語 'Compaction'（該術語要到第 3 頁才正式介紹）。"
+    },
+    {
+      "gate": "Gate 3 (SlideGate)",
+      "check": "G3-JARGON-ORDER",
+      "slide": "slide-2",
+      "detail": "slide-2 (第 2 頁): 過早出現未解釋術語 'KV-Cache'（該術語要到第 4 頁才正式介紹）。"
+    },
+    {
+      "gate": "Gate 3 (SlideGate)",
+      "check": "G3-BEGINNER-DENSITY",
+      "slide": "slide-3",
+      "detail": "slide-3: 教學密度超標 — 可見字數 765（上限 420），要點數 7（上限 5），易導致初學者認知過載與 1280×720 溢出。"
+    },
+    {
+      "gate": "Gate 3 (SlideGate)",
+      "check": "G3-SOURCE-CONSISTENCY",
+      "slide": "slide-4",
+      "detail": "slide-4: Citation Drift — 標註了 [SRC-04]，但本頁所引用的 Wiki (context-failure-modes) 只包含 ['SRC-02', 'SRC-05']，未包含 [SRC-04]。"
+    },
+    {
+      "gate": "Gate 4 (BrowserGate)",
+      "check": "B4-SLIDES-1280X720",
+      "detail": "以下頁次在 1280×720 發生內容溢出: S3(stage 613/613, card 587/587, body 520/413)"
+    }
+  ]
+}

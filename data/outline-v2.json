@@ -1,0 +1,160 @@
+{
+  "version": "v2",
+  "title": "Context Engineering（上下文工程）：零基礎教學簡報大綱",
+  "slides": [
+    {
+      "id": "slide-1",
+      "unit_num": 1,
+      "unit_name": "Unit 1 · 破題與心智模型",
+      "layout": "hero",
+      "title": "為什麼只學「寫好一句 Prompt」已經不夠了？",
+      "wiki_refs": ["overview-context-engineering"],
+      "source_refs": ["SRC-03", "SRC-05"],
+      "max_chars": 400,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-2",
+      "unit_num": 1,
+      "unit_name": "Unit 1 · 破題與心智模型",
+      "layout": "desk_sim",
+      "title": "先把 AI 想成 CPU，對話視窗就是它的書桌（RAM）",
+      "wiki_refs": ["cpu-ram-mental-model"],
+      "source_refs": ["SRC-03", "SRC-06"],
+      "max_chars": 400,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-3",
+      "unit_num": 1,
+      "unit_name": "Unit 1 · 破題與心智模型",
+      "layout": "compare",
+      "title": "Prompt Engineering vs Context Engineering 差在哪？",
+      "wiki_refs": ["prompt-vs-context-engineering"],
+      "source_refs": ["SRC-03", "SRC-05"],
+      "max_chars": 420,
+      "max_bullets": 5
+    },
+    {
+      "id": "slide-4",
+      "unit_num": 2,
+      "unit_name": "Unit 2 · 為什麼塞太多反而變笨？",
+      "layout": "u_curve",
+      "title": "注意力預算有限：小心「中間迷失（Lost in the Middle）」",
+      "wiki_refs": ["attention-budget-and-context-rot", "lost-in-the-middle"],
+      "source_refs": ["SRC-01", "SRC-05"],
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-5",
+      "unit_num": 2,
+      "unit_name": "Unit 2 · 為什麼塞太多反而變笨？",
+      "layout": "failure_grid",
+      "title": "書桌亂掉的 4 種病症：長上下文四大失效模式",
+      "wiki_refs": ["context-failure-modes"],
+      "source_refs": ["SRC-02", "SRC-05"],
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-6",
+      "unit_num": 3,
+      "unit_name": "Unit 3 · 四大工程策略 (WSCI)",
+      "layout": "wsci_overview",
+      "title": "治本只需記住 4 個動詞：WSCI 四大工程策略",
+      "wiki_refs": ["four-strategies-wsci"],
+      "source_refs": ["SRC-03", "SRC-05"],
+      "max_chars": 400,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-7",
+      "unit_num": 3,
+      "unit_name": "Unit 3 · 四大工程策略 (WSCI)",
+      "layout": "wsci_pair",
+      "title": "Write（筆記放硬碟）× Select（按目錄即時拿）",
+      "wiki_refs": ["strategy-write-offload", "strategy-select-retrieval"],
+      "source_refs": ["SRC-02", "SRC-03", "SRC-05"],
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-8",
+      "unit_num": 3,
+      "unit_name": "Unit 3 · 四大工程策略 (WSCI)",
+      "layout": "wsci_pair",
+      "title": "Compress（高保真壓縮）× Isolate（小幫手隔壁桌隔離）",
+      "wiki_refs": ["strategy-compress-compaction", "strategy-isolate-subagents"],
+      "source_refs": ["SRC-02", "SRC-03", "SRC-05"],
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-9",
+      "unit_num": 4,
+      "unit_name": "Unit 4 · 實戰落地與知識庫架構",
+      "layout": "concept_cards",
+      "title": "系統提示寫多細才剛好？Anthropic 的 Right Altitude 原則",
+      "wiki_refs": ["right-altitude-prompting"],
+      "source_refs": ["SRC-05"],
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-10",
+      "unit_num": 4,
+      "unit_name": "Unit 4 · 實戰落地與知識庫架構",
+      "layout": "concept_cards",
+      "title": "Manus 上線後的 5 個反直覺生產實戰教訓",
+      "wiki_refs": ["production-lessons-manus"],
+      "source_refs": ["SRC-04"],
+      "max_chars": 450,
+      "max_bullets": 5
+    },
+    {
+      "id": "slide-11",
+      "unit_num": 4,
+      "unit_name": "Unit 4 · 實戰落地與知識庫架構",
+      "layout": "compare",
+      "title": "從「臨時拼碎片 (RAG)」升級為「LLM Wiki 知識庫」",
+      "wiki_refs": ["llm-wiki-pattern", "rag-vs-llm-wiki"],
+      "source_refs": ["SRC-01", "SRC-05", "SRC-06"],
+      "max_chars": 430,
+      "max_bullets": 5
+    },
+    {
+      "id": "slide-12",
+      "unit_num": 4,
+      "unit_name": "Unit 4 · 實戰落地與知識庫架構",
+      "layout": "concept_cards",
+      "title": "這份簡報自己怎麼誕生？先討論、Wiki 編譯與前移檢查",
+      "wiki_refs": ["llm-wiki-pattern", "glossary-for-beginners"],
+      "source_refs": ["SRC-06"],
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-13",
+      "unit_num": 5,
+      "unit_name": "Unit 5 · 互動驗收與溯源總表",
+      "layout": "quiz",
+      "title": "動手診斷看看！初學者 3 題情境挑戰",
+      "wiki_refs": ["lost-in-the-middle", "context-failure-modes", "production-lessons-manus"],
+      "source_refs": ["SRC-01", "SRC-02", "SRC-04"],
+      "max_chars": 550,
+      "max_bullets": 3
+    },
+    {
+      "id": "slide-14",
+      "unit_num": 5,
+      "unit_name": "Unit 5 · 互動驗收與溯源總表",
+      "layout": "matrix",
+      "title": "全 14 頁簡報 ↔ Wiki ↔ 原始文獻完整溯源總表",
+      "wiki_refs": ["overview-context-engineering", "glossary-for-beginners"],
+      "source_refs": ["SRC-01", "SRC-02", "SRC-03", "SRC-04", "SRC-05", "SRC-06"],
+      "max_chars": 550,
+      "max_bullets": 4
+    }
+  ]
+}

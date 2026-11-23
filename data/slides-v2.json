@@ -1,0 +1,448 @@
+{
+  "version": "v2",
+  "title": "Context Engineering（上下文工程）教學簡報",
+  "slides": [
+    {
+      "id": "slide-1",
+      "unit_num": 1,
+      "unit_name": "Unit 1 · 破題與心智模型",
+      "layout": "hero",
+      "title": "為什麼只學「寫好一句 Prompt」已經不夠了？",
+      "subtitle": "零基礎入門 Context Engineering（上下文工程）的 14 頁實戰指南",
+      "hook": "為零基礎聊天使用者設計的實戰指南：幫 AI 這顆聰明的大腦整理「工作書桌」，從單句提問進化到動態配置每一步資訊。",
+      "bullets": [],
+      "cards": [
+        { "title": "建立心智模型", "desc": "看懂書桌與大腦分工" },
+        { "title": "診斷 4 大故障", "desc": "揭開塞越多越笨的原因" },
+        { "title": "掌握 WSCI 策略", "desc": "學會寫出/挑選/壓縮/隔離" },
+        { "title": "看懂生產實戰", "desc": "從 Manus 到結構化知識庫" }
+      ],
+      "takeaway": "AI 變笨往往不是模型不夠聰明，而是我們塞給它的視窗太混亂。",
+      "wiki_refs": ["overview-context-engineering"],
+      "source_refs": ["SRC-03", "SRC-05"],
+      "grounded_terms": ["Context Engineering", "AI Agent"],
+      "introduces_terms": ["Context Engineering"],
+      "speaker_notes": "歡迎來到這堂 Context Engineering 入門課。很多初學者把幾十頁資料全貼進對話框，卻發現 AI 開始漏看規則。今天我們要用 5 個單元拆解這個現象並學會解法。",
+      "max_chars": 400,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-2",
+      "unit_num": 1,
+      "unit_name": "Unit 1 · 破題與心智模型",
+      "layout": "desk_sim",
+      "title": "先把 AI 想成 CPU，對話視窗就是它的書桌（RAM）",
+      "subtitle": "Karpathy 與 LangChain 提出的作業系統類比",
+      "hook": "LLM 就像運算速度飛快的 CPU；Context Window（上下文視窗）則是面前有限的工作書桌（RAM）。",
+      "bullets": [
+        { "label": "LLM = CPU", "text": "負責推理與生成，但不會憑空記住這場對話外的新檔案。" },
+        { "label": "視窗 = 書桌 (RAM)", "text": "當下能看進眼裡的系統規則、對話與資料，全搶著佔用同一張桌面。" },
+        { "label": "檔案庫 = 硬碟 (Disk)", "text": "容量無限但放在桌外；右方實驗可親自測試塞爆書桌的後果！" }
+      ],
+      "takeaway": "好的工程就像作業系統：不把整座硬碟倒上書桌，只按步驟擺上要用的那一頁。",
+      "wiki_refs": ["cpu-ram-mental-model"],
+      "source_refs": ["SRC-03", "SRC-06"],
+      "grounded_terms": ["CPU", "RAM", "Context Window"],
+      "introduces_terms": ["Context Window"],
+      "speaker_notes": "請現場點按右方的「書桌壓力測試」按鈕：加入無關 PDF、備用工具與舊閒聊後，有效訊號比例立刻從 100% 跌到個位數，這就是我們必須整理書桌的直覺理由。",
+      "max_chars": 400,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-3",
+      "unit_num": 1,
+      "unit_name": "Unit 1 · 破題與心智模型",
+      "layout": "compare",
+      "title": "Prompt Engineering vs Context Engineering 差在哪？",
+      "subtitle": "從單輪一問一答，走向長程多步驟代理人",
+      "hook": "Prompt Engineering 決定「一句話怎麼問得漂亮」；Context Engineering 管理「連續工作 20 步時桌上該放什麼」。",
+      "comparison": {
+        "left": {
+          "title": "Prompt Engineering（提示詞工程）",
+          "points": [
+            "聚焦單一指令措辭、角色設定與輸出格式",
+            "典型場景：單輪或少輪一問一答",
+            "核心考驗：規則有沒有寫清楚？"
+          ]
+        },
+        "right": {
+          "title": "Context Engineering（上下文工程）",
+          "points": [
+            "動態配置系統提示、工具、記憶、檢索與歷史",
+            "典型場景：數十輪起跳的 AI Agent 任務",
+            "核心考驗：如何維持最小高訊號集合不退化？"
+          ]
+        }
+      },
+      "takeaway": "提示詞只是書桌上的第一張便條紙；Context Engineering 負責打理整張桌子。",
+      "wiki_refs": ["prompt-vs-context-engineering"],
+      "source_refs": ["SRC-03", "SRC-05"],
+      "grounded_terms": ["Prompt Engineering", "Context Engineering"],
+      "introduces_terms": ["Prompt Engineering"],
+      "speaker_notes": "Prompt Engineering 並沒有過時，而是成為 Context Engineering 的一塊基礎拼圖。一旦進入多回合呼叫工具的 Agent，動態更換上下文就變得比修飾單句措辭更關鍵。",
+      "max_chars": 420,
+      "max_bullets": 5
+    },
+    {
+      "id": "slide-4",
+      "unit_num": 2,
+      "unit_name": "Unit 2 · 為什麼塞太多反而變笨？",
+      "layout": "u_curve",
+      "title": "注意力預算有限：小心「中間迷失（Lost in the Middle）」",
+      "subtitle": "為何規格寫支援百萬 Token，塞太多還是漏看規則？",
+      "hook": "模型有固定額度的「Attention Budget（注意力預算）」，雜訊越堆越厚就會發生「Context Rot（上下文腐化）」。",
+      "bullets": [
+        { "label": "U 型記憶曲線", "text": "Stanford 實驗顯示模型對開頭（Primacy Bias）與結尾（Recency Bias）記最牢，中段準確率驟降。" },
+        { "label": "塞資料反而更糟", "text": "答案被埋在干擾文本中段時，表現甚至低於不給資料（Closed-book）基準。" },
+        { "label": "右圖實驗看看", "text": "點擊切換答案放置位置，觀察模型記憶如何掉進中段谷底。" }
+      ],
+      "takeaway": "「容量上限很大」不等於「每個位置的注意力一樣清晰」。",
+      "wiki_refs": ["attention-budget-and-context-rot", "lost-in-the-middle"],
+      "source_refs": ["SRC-01", "SRC-05"],
+      "grounded_terms": ["Attention Budget", "Context Rot", "Lost in the Middle", "Primacy Bias", "Recency Bias"],
+      "introduces_terms": ["Attention Budget", "Context Rot", "Lost in the Middle", "Primacy Bias", "Recency Bias"],
+      "speaker_notes": "這張投影片整合了 Anthropic 提出的 Attention Budget / Context Rot 理論與 Stanford 的 Lost in the Middle U 型實驗，提醒初學者別把重要規則壓在長文中段。",
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-5",
+      "unit_num": 2,
+      "unit_name": "Unit 2 · 為什麼塞太多反而變笨？",
+      "layout": "failure_grid",
+      "title": "書桌亂掉的 4 種病症：長上下文四大失效模式",
+      "subtitle": "Drew Breunig 歸納的長對話常見崩壞情境（點擊卡片看診斷）",
+      "hook": "上下文出包不只是字數爆掉，而是會分別以「中毒、分心、混亂、打架」四種病症發作。",
+      "cards": [
+        {
+          "title": "1. Context Poisoning（投毒）",
+          "badge": "假消息當真",
+          "symptom": "幻覺或錯誤工具結果混入摘要，後續步步皆錯。",
+          "cause": "模型把紀錄裡的錯誤當成事實，在無效目標無限打轉。",
+          "fix": "隔離檢疫（Quarantine）並先驗證才寫入。"
+        },
+        {
+          "title": "2. Context Distraction（分心）",
+          "badge": "歷史太吵",
+          "symptom": "長歷史淹沒規則，模型只顧著模仿舊對話動作。",
+          "cause": "冗長過去回合搶走注意力，蓋過系統規則。",
+          "fix": "定期修剪（Pruning）與摘要。"
+        },
+        {
+          "title": "3. Context Confusion（混亂）",
+          "badge": "工具太多",
+          "symptom": "同時塞入幾十個工具規格，導致叫錯或亂叫工具。",
+          "cause": "過多相似 Tool Schemas 彼此干擾模型判斷。",
+          "fix": "Tool Loadouts 依階段挑選少數工具。"
+        },
+        {
+          "title": "4. Context Clash（衝突）",
+          "badge": "規定打架",
+          "symptom": "新需求與舊文件矛盾，輸出忽左忽右。",
+          "cause": "未清除過時條文，模型被迫靜默亂猜。",
+          "fix": "主動淘汰舊條文或隔離審查。"
+        }
+      ],
+      "takeaway": "先診斷你的 AI 是中毒、分心、工具混亂還是規定打架，才能精準下藥。",
+      "wiki_refs": ["context-failure-modes"],
+      "source_refs": ["SRC-02", "SRC-05"],
+      "grounded_terms": ["Context Poisoning", "Context Distraction", "Context Confusion", "Context Clash", "Tool Loadouts"],
+      "introduces_terms": ["Context Poisoning", "Context Distraction", "Context Confusion", "Context Clash", "Tool Loadouts"],
+      "speaker_notes": "點擊四張診斷卡片示範每種錯誤的工程對策：尤其很多人接太多 MCP 工具時常遇到 Context Confusion，用 Tool Loadouts 就能立竿見影改善。",
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-6",
+      "unit_num": 3,
+      "unit_name": "Unit 3 · 四大工程策略 (WSCI)",
+      "layout": "wsci_overview",
+      "title": "治本只需記住 4 個動詞：WSCI 四大工程策略",
+      "subtitle": "LangChain 與業界共同歸納的上下文工程操作支柱",
+      "hook": "管理 AI 書桌的標準流程只有四招：Write（存桌外）、Select（挑要用的）、Compress（濃縮）、Isolate（找助手隔離做）。",
+      "cards": [
+        {
+          "title": "W · Write（寫出外部保存）",
+          "analogy": "把厚重報告存進資料夾，桌上只留一張檔案路徑便利貼。",
+          "fix": "防視窗爆滿與長期任務遺忘"
+        },
+        {
+          "title": "S · Select（即時精準挑選）",
+          "analogy": "先看目錄卡，只把當下這步真正需要的兩頁搬上書桌。",
+          "fix": "對治 Distraction（分心）與 Confusion"
+        },
+        {
+          "title": "C · Compress（高保真壓縮）",
+          "analogy": "書桌快滿時，整理成一頁精華交接單，換新桌子繼續。",
+          "fix": "降低 Token 成本與緩解腐化"
+        },
+        {
+          "title": "I · Isolate（子代理隔離）",
+          "analogy": "派 Sub-Agent（小幫手）去隔壁倉庫查資料，只拿結論回來。",
+          "fix": "隔離 Poisoning（投毒）與搜尋雜訊"
+        }
+      ],
+      "takeaway": "WSCI 不是互斥選項，優秀的 Agent 系統通常會同時組合這四招。",
+      "wiki_refs": ["four-strategies-wsci"],
+      "source_refs": ["SRC-03", "SRC-05"],
+      "grounded_terms": ["Write", "Select", "Compress", "Isolate", "Sub-Agent"],
+      "introduces_terms": ["Sub-Agent"],
+      "speaker_notes": "這張總覽把後面兩頁的四個具體技術先建立鳥瞰地圖，順便以「隔壁房間助手」的白話比喻正式引出 Sub-Agent 概念。",
+      "max_chars": 400,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-7",
+      "unit_num": 3,
+      "unit_name": "Unit 3 · 四大工程策略 (WSCI)",
+      "layout": "wsci_pair",
+      "title": "Write（筆記放硬碟）× Select（按目錄即時拿）",
+      "subtitle": "一進一出之間，維持最小的「高訊號 Token 集合」",
+      "hook": "龐大資料先寫出到外部檔案，需要查證時再透過輕量索引即時檢索，做到可逆且低雜訊。",
+      "cards": [
+        {
+          "title": "Write：外部筆記與檔案卸載",
+          "desc": "爬蟲或工具動輒回傳數萬字；把它存成檔案並維護 NOTES.md（Structured Note-Taking），視窗裡只留指標。",
+          "cause": "優點：可逆減肥——真要查某段細節時，隨時再讀檔取回即可。"
+        },
+        {
+          "title": "Select：Just-in-Time 即時挑選",
+          "desc": "不預先塞入大量未篩選檔案，改先看輕量目錄索引與 Tool Loadouts，按需抓取 2～3 份高相關內容上桌。",
+          "cause": "關鍵：把訊噪比拉到最高，直接避開中段注意力黑洞。"
+        }
+      ],
+      "takeaway": "別用對話視窗當硬碟；把記憶寫進檔案、用索引精準取回才是王道。",
+      "wiki_refs": ["strategy-write-offload", "strategy-select-retrieval"],
+      "source_refs": ["SRC-02", "SRC-03", "SRC-05"],
+      "grounded_terms": ["Structured Note-Taking", "Just-in-Time", "Tool Loadouts"],
+      "introduces_terms": ["Structured Note-Taking"],
+      "speaker_notes": "Write 與 Select 就像圖書館的「上架歸檔」與「看目錄借書」。透過結構化筆記（Structured Note-Taking）與目錄索引，AI 就算跑幾百步也能保持輕盈。",
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-8",
+      "unit_num": 3,
+      "unit_name": "Unit 3 · 四大工程策略 (WSCI)",
+      "layout": "wsci_pair",
+      "title": "Compress（高保真壓縮）× Isolate（小幫手隔壁桌隔離）",
+      "subtitle": "長程任務不崩潰的兩大防線",
+      "hook": "必須留下的長歷史靠 Compaction 精準瘦身；探索過程的大量試錯雜訊，則交給 Sub-Agent 在獨立房間吸收。",
+      "cards": [
+        {
+          "title": "Compress：Compaction 高保真緊縮",
+          "desc": "對話逼近容量時啟動壓縮：保留架構決策、未解錯誤與目前進度，丟棄過時原始輸出後重開乾淨視窗。",
+          "cause": "注意：千萬別把「試過失敗的報錯原因」也刪光，否則 AI 會重踩同一個坑！"
+        },
+        {
+          "title": "Isolate：Sub-Agent 10萬 → 2千 Token 漏斗",
+          "desc": "協調者保持高層計畫；讓 Sub-Agent 在獨立視窗耗費數萬～十萬 Token 翻查資料，只回傳 1～2 千 Token 精煉報告。",
+          "cause": "效果：98% 搜尋過程雜訊留在隔壁房間，主協調者永遠神清氣爽。"
+        }
+      ],
+      "takeaway": "壓縮要留住「未解決錯誤」，隔離則把「翻箱倒櫃的雜訊」關在門外。",
+      "wiki_refs": ["strategy-compress-compaction", "strategy-isolate-subagents"],
+      "source_refs": ["SRC-02", "SRC-03", "SRC-05"],
+      "grounded_terms": ["Compaction", "Sub-Agent", "Poisoning"],
+      "introduces_terms": ["Compaction"],
+      "speaker_notes": "這頁特別強調 Anthropic 提出的高保真 Compaction 與 Sub-Agent 濃縮比：從十萬 Token 探索濃縮回 1,000~2,000 Token 的乾淨報告，是現代複雜 Agent 的核心技巧。",
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-9",
+      "unit_num": 4,
+      "unit_name": "Unit 4 · 實戰落地與知識庫架構",
+      "layout": "concept_cards",
+      "title": "系統提示寫多細才剛好？Anthropic 的 Right Altitude 原則",
+      "subtitle": "站對指令的抽象高度，釋放推理彈性又不失控",
+      "hook": "寫系統提示就像帶實習生：寫成死板 if-else 會卡死，只喊空泛口號又會走偏，要站在「Right Altitude（適當高度）」。",
+      "cards": [
+        {
+          "title": "❌ 高度太低（過度微觀）",
+          "desc": "寫死數百條 if-else 邊界條件，不但浪費注意力預算，遇到新狀況就立刻卡死。"
+        },
+        {
+          "title": "✓ Right Altitude（適當高度）",
+          "desc": "給予清楚的啟發式原則與行為邊界，搭配 XML 標籤（如 <instructions>）結構分區與 1～2 個黃金範例。"
+        },
+        {
+          "title": "❌ 高度太高（過度空泛）",
+          "desc": "只寫「做個專業有幫助的助手」，缺乏驗收標準導致每回合輸出品質飄移。"
+        }
+      ],
+      "takeaway": "與其寫滿 100 條「不准做什麼」的負面條列，不如用清晰 XML 分區給出原則與好範例。",
+      "wiki_refs": ["right-altitude-prompting"],
+      "source_refs": ["SRC-05"],
+      "grounded_terms": ["Right Altitude", "Attention Budget"],
+      "introduces_terms": ["Right Altitude"],
+      "speaker_notes": "我們這份簡報專案根目錄的 SCHEMA.md，就是採用 Right Altitude 原則撰寫——規範格式與檢查門檻，但不死板限制每個字詞。",
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-10",
+      "unit_num": 4,
+      "unit_name": "Unit 4 · 實戰落地與知識庫架構",
+      "layout": "concept_cards",
+      "title": "Manus 上線後的 5 個反直覺生產實戰教訓",
+      "subtitle": "真實商用 Agent 跑在雲端時才遇得到的細節",
+      "hook": "工程理論上線後會遇到費率、快取與長程遺忘問題——Manus 團隊總結出五個反直覺但關鍵的實戰經驗。",
+      "bullets": [
+        { "label": "1. KV-Cache 為第一指標", "text": "前綴保持靜態且只追加歷史，別在開頭放每秒跳動的 timestamp，否則整段重算燒爆費用。" },
+        { "label": "2. Logit Masking 取代刪除工具", "text": "動態刪掉工具定義會破快取又害模型錯亂；固定清單並於解碼端遮罩可用工具才穩。" },
+        { "label": "3. 檔案系統作無限記憶", "text": "長輸出存本地檔案，視窗只留路徑，需要細節再讀檔取回。" },
+        { "label": "4. todo.md 復誦錨定目標", "text": "持續將待辦進度重寫到對話最末尾，利用近因效應對抗中段遺忘。" },
+        { "label": "5. Keep the Wrong Stuff In", "text": "保留失敗工具報錯在視窗中，AI 才能記取教訓改換方法。" }
+      ],
+      "takeaway": "別把失敗紀錄擦掉！錯誤反饋與末端 todo.md 復誦，都是讓 Agent 變穩的關鍵。",
+      "wiki_refs": ["production-lessons-manus"],
+      "source_refs": ["SRC-04"],
+      "grounded_terms": ["KV-Cache", "Logit Masking", "todo.md"],
+      "introduces_terms": ["KV-Cache", "Logit Masking"],
+      "speaker_notes": "這頁正式介紹 KV-Cache 與 Logit Masking 兩個生產級術語，特別點出為何 Tool Loadouts 在超重快取系統會改以 Logit Masking 實作。",
+      "max_chars": 450,
+      "max_bullets": 5
+    },
+    {
+      "id": "slide-11",
+      "unit_num": 4,
+      "unit_name": "Unit 4 · 實戰落地與知識庫架構",
+      "layout": "compare",
+      "title": "從「臨時拼碎片 (RAG)」升級為「LLM Wiki 知識庫」",
+      "subtitle": "Karpathy 提出的三層編譯型個人知識架構",
+      "hook": "傳統 RAG 是問問題才臨時翻找切碎的紙片；LLM Wiki 則是在收到文章當下，就提前整理成互連的 Markdown 筆記。",
+      "comparison": {
+        "left": {
+          "title": "傳統向量切塊 RAG",
+          "points": [
+            "查詢時（Query-time）才臨時抓幾塊文字碎片拼湊",
+            "固定字數切塊容易斷章取義、缺乏前後脈絡",
+            "一次塞入大量檢索塊容易觸發 Lost in the Middle",
+            "每次發問重算一次，知識不會隨時間複利累積"
+          ]
+        },
+        "right": {
+          "title": "Karpathy LLM Wiki 三層架構",
+          "points": [
+            "raw/（唯讀來源）→ wiki/（編譯互連）→ index.md + log.md",
+            "攝取時（Ingest-time）提前消除矛盾並建立雙向連結",
+            "查詢時先讀輕量 index.md，Just-in-Time 只抓關鍵 2～3 頁",
+            "透過定期 Lint 迴圈捉出斷鏈與孤島，知識越用越強"
+          ]
+        }
+      },
+      "takeaway": "LLM Wiki 本質上就是把 Write、Select 與結構化整理用在「知識管理」的最佳範例。",
+      "wiki_refs": ["llm-wiki-pattern", "rag-vs-llm-wiki"],
+      "source_refs": ["SRC-01", "SRC-05", "SRC-06"],
+      "grounded_terms": ["LLM Wiki", "RAG", "index.md", "log.md"],
+      "introduces_terms": ["LLM Wiki"],
+      "speaker_notes": "到此為止，學員已經完整看懂所有核心理論，現在正式揭曉我們這整份作業所採用的知識庫引擎——Karpathy 的 LLM Wiki。",
+      "max_chars": 430,
+      "max_bullets": 5
+    },
+    {
+      "id": "slide-12",
+      "unit_num": 4,
+      "unit_name": "Unit 4 · 實戰落地與知識庫架構",
+      "layout": "concept_cards",
+      "title": "這份簡報自己怎麼誕生？先討論、Wiki 編譯與前移檢查",
+      "subtitle": "把 Context Engineering 原則套用在我們自己的製作管線",
+      "hook": "我們不是把 6 篇文章一次丟給 AI 盲寫簡報，而是用四道自動化檢查關卡（Shift-Left Gates）步步把關。",
+      "cards": [
+        {
+          "title": "Step 1 · 先討論後攝取",
+          "desc": "先定調零基礎受眾與教學順序，再把 6 篇 raw/ 編譯為 16 篇彼此連結的 wiki/，通過 Gate 1 WikiLint。"
+        },
+        {
+          "title": "Step 2 · 大綱前移攔截",
+          "desc": "寫簡報正文前先過 Gate 2 OutlineGate，鎖定先修概念順序 DAG 與單頁字數上限。"
+        },
+        {
+          "title": "Step 3 · 逐頁溯源 + 實機驗證",
+          "desc": "Gate 3 檢查 Citation Drift 與術語順序；Gate 4 跑真實瀏覽器確認 1280×720 零溢出、全頁點擊溯源。"
+        }
+      ],
+      "takeaway": "檢查前移（Shift-Left）才能防止錯誤在最後階段滾雪球、大幅降低返工成本。",
+      "wiki_refs": ["llm-wiki-pattern", "glossary-for-beginners"],
+      "source_refs": ["SRC-06"],
+      "grounded_terms": ["LLM Wiki", "raw/", "wiki/"],
+      "introduces_terms": [],
+      "speaker_notes": "如果想看 v1 初版管線踩到的真實錯誤和我們如何修改流程圖，簡報結束後歡迎切換上方導覽的「流程與反思」頁面檢視 Run #1 與 Run #2 的完整審計報表。",
+      "max_chars": 420,
+      "max_bullets": 4
+    },
+    {
+      "id": "slide-13",
+      "unit_num": 5,
+      "unit_name": "Unit 5 · 互動驗收與溯源總表",
+      "layout": "quiz",
+      "title": "動手診斷看看！初學者 3 題情境挑戰",
+      "subtitle": "即時測驗你的觀念，答完可點擊標籤直接打開對應 Wiki 頁",
+      "hook": "遇到以下三種真實開發窘境，你該拿出哪一招 Context Engineering 處方？",
+      "interactive": {
+        "prompt": "請點擊每題你認為正確的選項：",
+        "questions": [
+          {
+            "q": "AI 接了 45 個外部工具後開始亂叫錯的工具，這是哪種失效？該怎麼修？",
+            "options": [
+              "Context Confusion，改用 Tool Loadouts 精選工具或 Logit Masking",
+              "Context Poisoning，把系統提示字體放大就好",
+              "把所有舊歷史全刪光重開"
+            ],
+            "answer": 0,
+            "explain": "工具定義過多造成選擇雜訊即為 Context Confusion，可透過 Tool Loadouts 或不破快取的 Logit Masking 解決。",
+            "wiki": "context-failure-modes"
+          },
+          {
+            "q": "塞了 20 份 PDF 給 AI，但最重要規定放在第 10 份檔案，結果 AI 漏看了，為什麼？",
+            "options": [
+              "模型對中間位置記憶最低，掉進了 Lost in the Middle 谷底",
+              "PDF 文字一定要轉成全英文模型才看得懂",
+              "因為放在最開頭才會被模型忘記"
+            ],
+            "answer": 0,
+            "explain": "模型遵循 U 型記憶曲線：首因與近因最強，中段最低；關鍵規定應置於開頭或用 todo.md 復誦於結尾。",
+            "wiki": "lost-in-the-middle"
+          },
+          {
+            "q": "為什麼 Manus 建議把失敗的工具報錯保留在對話裡，不急著抹掉？",
+            "options": [
+              "為了故意多消耗一點 KV-Cache 額度",
+              "保留錯誤軌跡讓模型得到即時反饋，避免重蹈覆轍",
+              "因為檔案系統不能寫入失敗訊息"
+            ],
+            "answer": 1,
+            "explain": "Keep the Wrong Stuff In：錯誤日誌是模型修正路線的關鍵反饋訊號，抹除反而會重複犯錯。",
+            "wiki": "production-lessons-manus"
+          }
+        ]
+      },
+      "takeaway": "每一個工程選擇背後，都有對應的注意力機制與實驗證據支持。",
+      "wiki_refs": ["lost-in-the-middle", "context-failure-modes", "production-lessons-manus"],
+      "source_refs": ["SRC-01", "SRC-02", "SRC-04"],
+      "grounded_terms": ["Context Confusion", "Tool Loadouts", "Lost in the Middle", "Keep the Wrong Stuff In"],
+      "introduces_terms": [],
+      "speaker_notes": "這 3 道情境題直接測試初學者是否真的分得清 Confusion vs Poisoning、Lost in the Middle 位置效應、以及 Keep the Wrong Stuff In 的實戰直覺。",
+      "max_chars": 550,
+      "max_bullets": 3
+    },
+    {
+      "id": "slide-14",
+      "unit_num": 5,
+      "unit_name": "Unit 5 · 互動驗收與溯源總表",
+      "layout": "matrix",
+      "title": "全 14 頁簡報 ↔ Wiki ↔ 原始文獻完整溯源總表",
+      "subtitle": "100% 覆蓋 16 篇 Wiki 與 6 篇一手 Raw 文獻——點頁號跳頁、點標籤開 Wiki 抽屜",
+      "hook": "",
+      "takeaway": "下一步行動：前往「互動 Wiki」探索知識圖譜，或到「流程與反思」檢視 Run #1 → Run #2 審計紀錄。",
+      "wiki_refs": ["overview-context-engineering", "glossary-for-beginners"],
+      "source_refs": ["SRC-01", "SRC-02", "SRC-03", "SRC-04", "SRC-05", "SRC-06"],
+      "grounded_terms": ["Context Engineering", "LLM Wiki", "RAG"],
+      "introduces_terms": [],
+      "speaker_notes": "最後一頁把全部 14 頁教學簡報、16 篇 Wiki 知識頁和 6 篇原始資料的對應關係完整摊開在學員面前，任何一點好奇都可以立即點擊溯源驗證。",
+      "max_chars": 550,
+      "max_bullets": 4
+    }
+  ]
+}
